@@ -1,20 +1,21 @@
-import asyncio
-import websockets
+import asyncio # Импортируем asyncio для работы с асинхронными операциями
+import websockets # Импортируем библиотеку для работы с WebSockets
 from websockets import ServerConnection
 
+# Обработчик входящих сообщений
 async def echo(websocket: ServerConnection):
-    async for message in websocket:
-        print(f"Получено сообщение: {message}")
-        response = f"Сервер получил: {message}"
+    async for message in websocket: # Асинхронно обрабатываем входящие сообщения
+        print(f"Получено сообщение: {message}") # Логируем полученное сообщение
 
-        for _ in range(5):
-            await websocket.send(response)
+        response = f"Сервер получил: {message}" # Формируем ответное сообщение
+        await websocket.send(response) # Отправляем ответ  клиенту
 
+# Запуск WebSockets-сервера на порту 8765
 async def main():
-    server = await websockets.serve(echo, "localhost", 8765)
-    print("Websocket сервер запущен на ws://localhost:8765")
-    await server.wait_closed()
+    server = await websockets.serve(echo, "localhost", 8765) # Запускаем сервер
+    print("Websocket сервер запущен на ws://localhost:8765") # Выводим сообщение о запуске
+    await server.wait_closed() # Ожидания закрытия сервера (обычно он работает вечно)
 
-asyncio.run(main())
+asyncio.run(main()) # Запускаем асинхронный код
 
 
