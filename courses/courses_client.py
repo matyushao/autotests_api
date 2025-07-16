@@ -24,11 +24,11 @@ class UpdateCoursesRequestDict(TypedDict):
     """
     Описание структуры запроса на обновление курса
     """
-    title: str
-    maxScore: int
-    minScore: int
-    description: str
-    estimatedTime: str
+    title: str | None
+    maxScore: int | None
+    minScore: int | None
+    description: str | None
+    estimatedTime: str | None
 
 class CoursesClient(APIClient):
     """
@@ -44,11 +44,11 @@ class CoursesClient(APIClient):
         """
         return self.get(url="/api/v1/courses/", params=query)
 
-    def get_course_id_api(self, course_id: str) -> Response:
+    def get_course_api_by_course_id(self, course_id: str) -> Response:
         """
         Метод получения курса
 
-        :param course_id: Индификатор курса
+        :param course_id: Идентификатор курса
         :return: Ответ от сервера в виде объекта httpx.Response
         """
         return self.get(f"url=/api/v1/courses/{course_id}/")
@@ -62,7 +62,7 @@ class CoursesClient(APIClient):
         """
         return self.post(url="/api/v1/courses/", json=request)
 
-    def update_courses_api(self, request:UpdateCoursesRequestDict) -> Response:
+    def update_courses_api(self, course_id: str, request:UpdateCoursesRequestDict) -> Response:
         """
         Метод обновления курса
 
@@ -70,7 +70,7 @@ class CoursesClient(APIClient):
         :param request: Словарь с title, maxScore, minScore, description, estimatedTime
         :return: Ответ от сервера в виде объекта httpx.Response
         """
-        return self.patch(url="/api/v1/courses/", json=request)
+        return self.patch(f"url=/api/v1/courses/{course_id}", json=request)
 
     def delete_courses_api(self, course_id: str) -> Response:
         """
